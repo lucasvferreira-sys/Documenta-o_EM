@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Diagnóstico Financeiro Empresarial</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;margin:0;padding:20px}
+.container{max-width:900px;margin:auto;background:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+h2{text-align:center;color:#4a4a8a}
+.slider-group{margin:15px 0}
+label{font-weight:bold}
+input[type=range]{width:100%}
+.value{float:right}
+button{background:#6c63ff;color:#fff;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;width:100%;margin-top:20px;font-size:16px}
+button:hover{opacity:0.9}
+canvas{margin-top:30px}
+@media print{
+  button{display:none}
+  body{background:#fff}
+  .container{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div style="text-align:center">
+<img src="EM.png" style="max-width:320px;margin-bottom:10px">
+<h2>Diagnóstico Financeiro Empresarial</h2>
+</div>
+<div style="display:flex;gap:10px;margin-bottom:15px">
+<input placeholder="Nome do Cliente" id="clientName" style="flex:1;padding:8px">
+<input type="date" id="clientDate" style="flex:1;padding:8px">
+</div>
+
+
+<div id="sliders"></div>
+
+<button onclick="updateChart()">Gerar Diagnóstico</button>
+<button onclick="printReport()">Imprimir / Salvar PDF</button>
+
+<canvas id="radarChart"></canvas>
+<div id="classification" style="font-weight:bold;text-align:center;margin:25px 0;font-size:28px"></div>
+</div>
+
+<script>
+const pillars = [
+"Receitas",
+"Clareza Informações",
+"Custos Fixos/Variáveis",
+"Projeção Receitas",
+"Reserva Emergência",
+"Planejamento Financeiro",
+"Reserva Oportunidades",
+"Fluxo de Caixa"
+];
+
+const slidersDiv = document.getElementById("sliders");
+
+pillars.forEach((p,i)=>{
+  slidersDiv.innerHTML += `
+  <div class="slider-group">
+    <label>${p} <span class="value" id="val${i}">5</span></label>
+    <input type="range" min="0" max="10" value="5" id="s${i}" oninput="document.getElementById('val${i}').innerText=this.value">
+  </div>`;
+});
+
+const ctx = document.getElementById('radarChart');
+
+const chart = new Chart(ctx, {
+  type: 'radar',
+  data: {
+    labels: pillars,
+    datasets: [{
+      label: 'Nível de Maturidade',
+      data: Array(8).fill(5),
+      fill: true,
+      backgroundColor: 'rgba(108,99,255,0.3)',
+      borderColor: '#6c63ff',
+      pointBackgroundColor: '#6c63ff'
+    }]
+  },
+  options: {
+    scales: {
+      r: {
+        min: 0,
+        max: 10,
+        ticks: { stepSize: 2 }
+      }
+    }
+  }
+});
+
+function updateChart(){
+
+  const values = pillars.map((_,i)=>Number(document.getElementById(`s${i}`).value));
+  chart.data.datasets[0].data = values;
+  chart.update();
+  classify(values);
+}
+
+function classify(values){
+  const avg = values.reduce((a,b)=>a+b,0)/values.length;
+  let result = "Crítico";
+  if(avg >= 5) result = "Regular";
+  if(avg >= 7) result = "Bom";
+  if(avg >= 9) result = "Excelente";
+  document.getElementById('classification').innerText = "Classificação Geral: " + result;
+}
+
+function printReport(){
+  window.print();
+}
+
+function classify(values){
+  const avg = values.reduce((a,b)=>a+b,0)/values.length;
+
+  let result = "Crítico";
+  let description = "A empresa apresenta alto risco financeiro. Falta controle sobre receitas, custos e planejamento. É necessário estruturar urgentemente os processos financeiros básicos.";
+
+  if(avg >= 5){
+    result = "Regular";
+    description = "A empresa possui algum controle financeiro, porém ainda apresenta falhas importantes. Com organização e acompanhamento é possível evoluir rapidamente.";
+  }
+
+  if(avg >= 7){
+    result = "Bom";
+    description = "A empresa demonstra boa organização financeira, com controles definidos e visão de futuro. O próximo passo é otimizar e escalar.";
+  }
+
+  if(avg >= 9){
+    result = "Excelente";
+    description = "A empresa possui alta maturidade financeira, previsibilidade e forte capacidade de crescimento sustentável.";
+  }
+
+  document.getElementById('classification').innerHTML = 
+    "Classificação Geral: " + result +
+    "<div style='font-size:16px;margin-top:8px'>" + description + "</div>";
+}
+
+
+
+</script>
+</body>
+</html>
