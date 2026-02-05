@@ -236,6 +236,12 @@ body{background:#fff}
 
 <div id="classification"></div>
 
+<div id="score" style="margin-top:20px;font-size:18px;font-weight:600"></div>
+
+<div id="criticalPoints" style="margin-top:15px"></div>
+
+<div id="executiveSummary" style="margin-top:20px;padding:20px;border-radius:12px;background:#f1f5f9"></div>
+
 </div>
 
 </div>
@@ -296,7 +302,8 @@ classify(values);
 
 function classify(values){
 
-const avg=values.reduce((a,b)=>a+b,0)/values.length;
+const avg = values.reduce((a,b)=>a+b,0)/values.length;
+const finalScore = avg.toFixed(1);
 
 let result="Crítico";
 let desc="A empresa apresenta alto risco financeiro e ausência de controles essenciais.";
@@ -318,11 +325,45 @@ desc="Alta maturidade financeira e forte capacidade de crescimento.";
 color="#16a34a";
 }
 
+/* CLASSIFICAÇÃO */
 document.getElementById("classification").innerHTML=`
 <div style="background:${color}15;border-left:6px solid ${color};padding:20px;border-radius:12px">
 <h2 style="color:${color}">${result}</h2>
 <p>${desc}</p>
 </div>
+`;
+
+/* NOTA GERAL */
+document.getElementById("score").innerHTML =
+`Nota Geral: <b>${finalScore} / 10</b>`;
+
+/* PONTOS CRÍTICOS */
+let critical = [];
+values.forEach((v,i)=>{
+ if(v < 5){
+   critical.push(pillars[i]);
+ }
+});
+
+if(critical.length>0){
+document.getElementById("criticalPoints").innerHTML = `
+<b>Pontos Críticos:</b>
+<ul>
+${critical.map(c=>`<li>${c}</li>`).join("")}
+</ul>
+`;
+}else{
+document.getElementById("criticalPoints").innerHTML =
+"<b>Pontos Críticos:</b> Nenhum identificado.";
+}
+
+/* RESUMO EXECUTIVO */
+document.getElementById("executiveSummary").innerHTML = `
+<b>Resumo Executivo</b><br><br>
+A empresa apresenta nível de maturidade <b>${result}</b>, com nota geral
+<b>${finalScore}/10</b>. Os principais pontos de atenção estão relacionados
+aos pilares listados como críticos. Recomenda-se priorizar ações corretivas
+nestes itens antes de avançar para otimizações e crescimento.
 `;
 
 }
