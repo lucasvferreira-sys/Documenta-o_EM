@@ -3,100 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <title>Diagnóstico Financeiro Empresarial</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
 :root{
 --primary:#4f46e5;
---bg:#f4f6fb;
+--secondary:#0f172a;
+--bg:#f5f7fb;
 --card:#ffffff;
---text:#1f2937;
---muted:#6b7280;
+--text:#0f172a;
+--muted:#64748b;
+--radius:14px;
 }
 
 *{box-sizing:border-box}
 
 body{
 margin:0;
-padding:20px;
-font-family:Inter,Arial,Helvetica,sans-serif;
-background:var(--bg);
+padding:30px;
+font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;
+background:linear-gradient(180deg,#f5f7fb,#eef2ff);
 color:var(--text);
 }
 
-.container{
-max-width:960px;
+.app{
+max-width:1100px;
 margin:auto;
+}
+
+.topbar{
 background:var(--card);
-padding:35px;
-border-radius:16px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
-
-header{
-text-align:center;
-margin-bottom:30px;
-}
-
-header img{
-max-width:260px;
-margin-bottom:10px;
-}
-
-h1{
-margin:0;
-font-size:26px;
-color:var(--primary);
-}
-
-.subtitle{
-color:var(--muted);
-font-size:14px;
-}
-
-.client-row{
+padding:22px 30px;
+border-radius:var(--radius);
+box-shadow:0 8px 24px rgba(0,0,0,.06);
 display:flex;
-gap:15px;
+align-items:center;
+gap:20px;
+}
+
+.topbar img{
+height:60px;
+}
+
+.topbar-title h1{
+margin:0;
+font-size:22px;
+}
+
+.topbar-title p{
+margin:4px 0 0;
+font-size:13px;
+color:var(--muted);
+}
+
+.grid{
+display:grid;
+grid-template-columns:380px 1fr;
+gap:25px;
 margin-top:25px;
 }
 
-.client-row input{
-flex:1;
-padding:12px;
-border-radius:8px;
-border:1px solid #ddd;
-font-size:14px;
+.panel{
+background:var(--card);
+border-radius:var(--radius);
+padding:25px;
+box-shadow:0 8px 24px rgba(0,0,0,.05);
 }
 
-.card{
-background:#f9fafb;
-border-radius:12px;
-padding:20px;
-margin-top:25px;
-}
-
-.card h3{
+.panel h3{
 margin-top:0;
-color:var(--primary);
 font-size:16px;
+color:var(--primary);
+}
+
+.field{
+margin-bottom:14px;
+}
+
+.field label{
+font-size:13px;
+color:var(--muted);
+display:block;
+margin-bottom:4px;
+}
+
+.field input{
+width:100%;
+padding:11px 12px;
+border-radius:10px;
+border:1px solid #dbeafe;
+font-size:14px;
 }
 
 .instructions p{
 margin:4px 0;
-font-size:14px;
+font-size:13px;
 }
 
 .slider-group{
-margin:18px 0;
+margin:16px 0;
 }
 
 .slider-group label{
 display:flex;
 justify-content:space-between;
+font-size:13px;
 font-weight:600;
-font-size:14px;
 }
 
 input[type=range]{
@@ -106,57 +119,55 @@ margin-top:6px;
 
 .actions{
 display:flex;
-gap:15px;
-margin-top:25px;
+gap:12px;
+margin-top:20px;
 }
 
 button{
 flex:1;
-padding:14px;
+padding:13px;
 border:none;
 border-radius:10px;
 background:var(--primary);
 color:#fff;
-font-size:15px;
+font-size:14px;
 cursor:pointer;
 }
 
 button.secondary{
-background:#111827;
+background:var(--secondary);
 }
 
-button:hover{
-opacity:.9;
-}
+button:hover{opacity:.9}
 
-canvas{
-margin-top:35px;
+.chart-panel{
+background:var(--card);
+border-radius:var(--radius);
+padding:30px;
+box-shadow:0 8px 24px rgba(0,0,0,.05);
 }
 
 #classification{
 margin-top:30px;
-padding:25px;
-background:#eef2ff;
+padding:22px;
 border-radius:14px;
-text-align:center;
 }
 
 #classification h2{
 margin:0;
-font-size:28px;
-color:var(--primary);
+font-size:26px;
 }
 
 #classification p{
-margin-top:10px;
-font-size:15px;
-color:#374151;
+margin-top:6px;
+font-size:14px;
 }
 
 @media print{
 button,.actions{display:none}
 body{background:#fff}
-.container{box-shadow:none}
+.panel,.chart-panel,.topbar{box-shadow:none}
+.grid{grid-template-columns:1fr}
 }
 
 </style>
@@ -164,21 +175,40 @@ body{background:#fff}
 
 <body>
 
-<div class="container">
+<div class="app">
 
-<header>
+<!-- TOPO -->
+<div class="topbar">
 <img src="EM.png">
+<div class="topbar-title">
 <h1>Diagnóstico Financeiro Empresarial</h1>
-<div class="subtitle">Avaliação rápida do nível de maturidade financeira</div>
-</header>
+<p>Ferramenta de avaliação de maturidade financeira</p>
+</div>
+</div>
 
-<div class="client-row">
-<input placeholder="Nome do Cliente" id="clientName">
+<!-- CONTEÚDO -->
+<div class="grid">
+
+<!-- LADO ESQUERDO -->
+<div class="panel">
+
+<h3>Dados do Cliente</h3>
+
+<div class="field">
+<label>Nome do Cliente</label>
+<input id="clientName">
+</div>
+
+<div class="field">
+<label>Data da Avaliação</label>
 <input type="date" id="clientDate">
 </div>
 
-<div class="card instructions">
-<h3>Como pontuar</h3>
+<hr style="margin:25px 0">
+
+<h3>Como Pontuar</h3>
+
+<div class="instructions">
 <p>0 a 2 → Não existe controle</p>
 <p>3 a 4 → Controle muito básico</p>
 <p>5 a 6 → Controle parcial</p>
@@ -186,12 +216,21 @@ body{background:#fff}
 <p>9 a 10 → Excelente nível de controle</p>
 </div>
 
-<div class="card" id="sliders"></div>
+<hr style="margin:25px 0">
+
+<h3>Critérios Avaliados</h3>
+
+<div id="sliders"></div>
 
 <div class="actions">
 <button onclick="updateChart()">Gerar Diagnóstico</button>
-<button class="secondary" onclick="printReport()">Salvar / Imprimir PDF</button>
+<button class="secondary" onclick="printReport()">Salvar PDF</button>
 </div>
+
+</div>
+
+<!-- LADO DIREITO -->
+<div class="chart-panel">
 
 <canvas id="radarChart"></canvas>
 
@@ -199,9 +238,13 @@ body{background:#fff}
 
 </div>
 
+</div>
+
+</div>
+
 <script>
 
-const pillars = [
+const pillars=[
 "Receitas",
 "Clareza Informações",
 "Custos Fixos/Variáveis",
@@ -212,72 +255,74 @@ const pillars = [
 "Fluxo de Caixa"
 ];
 
-const slidersDiv = document.getElementById("sliders");
+const slidersDiv=document.getElementById("sliders");
 
 pillars.forEach((p,i)=>{
-slidersDiv.innerHTML += `
+slidersDiv.innerHTML+=`
 <div class="slider-group">
-<label>${p} <span id="val${i}">5</span></label>
+<label>${p}<span id="val${i}">5</span></label>
 <input type="range" min="0" max="10" value="5"
 id="s${i}"
 oninput="document.getElementById('val${i}').innerText=this.value">
 </div>`;
 });
 
-const chart = new Chart(document.getElementById("radarChart"),{
+const chart=new Chart(document.getElementById("radarChart"),{
 type:"radar",
 data:{
 labels:pillars,
 datasets:[{
-label:"Nível de Maturidade",
+label:"Maturidade",
 data:Array(8).fill(5),
 fill:true,
-backgroundColor:"rgba(79,70,229,.3)",
+backgroundColor:"rgba(79,70,229,.25)",
 borderColor:"#4f46e5",
 pointBackgroundColor:"#4f46e5"
 }]
 },
 options:{
 scales:{
-r:{
-min:0,
-max:10,
-ticks:{stepSize:2}
-}
+r:{min:0,max:10,ticks:{stepSize:2}}
 }
 }
 });
 
 function updateChart(){
-const values = pillars.map((_,i)=>Number(document.getElementById(`s${i}`).value));
-chart.data.datasets[0].data = values;
+const values=pillars.map((_,i)=>Number(document.getElementById(`s${i}`).value));
+chart.data.datasets[0].data=values;
 chart.update();
 classify(values);
 }
 
 function classify(values){
 
-const avg = values.reduce((a,b)=>a+b,0)/values.length;
+const avg=values.reduce((a,b)=>a+b,0)/values.length;
 
 let result="Crítico";
 let desc="A empresa apresenta alto risco financeiro e ausência de controles essenciais.";
+let color="#dc2626";
 
 if(avg>=5){
 result="Regular";
 desc="Há algum controle financeiro, porém ainda inconsistente.";
+color="#f59e0b";
 }
 if(avg>=7){
 result="Bom";
 desc="Boa organização financeira e controles estruturados.";
+color="#2563eb";
 }
 if(avg>=9){
 result="Excelente";
 desc="Alta maturidade financeira e forte capacidade de crescimento.";
+color="#16a34a";
 }
 
 document.getElementById("classification").innerHTML=`
-<h2>${result}</h2>
+<div style="background:${color}15;border-left:6px solid ${color};padding:20px;border-radius:12px">
+<h2 style="color:${color}">${result}</h2>
 <p>${desc}</p>
+</div>
 `;
 
 }
