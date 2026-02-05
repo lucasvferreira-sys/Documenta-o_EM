@@ -15,6 +15,14 @@ input[type=range]{width:100%}
 button{background:#6c63ff;color:#fff;border:none;padding:12px 20px;border-radius:8px;cursor:pointer;width:100%;margin-top:20px;font-size:16px}
 button:hover{opacity:0.9}
 canvas{margin-top:30px}
+.instructions{
+background:#f2f4ff;
+padding:15px;
+border-radius:8px;
+margin-bottom:20px;
+font-size:14px;
+line-height:1.5;
+}
 @media print{
   button{display:none}
   body{background:#fff}
@@ -22,17 +30,30 @@ canvas{margin-top:30px}
 }
 </style>
 </head>
+
 <body>
+
 <div class="container">
+
 <div style="text-align:center">
 <img src="EM.png" style="max-width:320px;margin-bottom:10px">
 <h2>Diagnóstico Financeiro Empresarial</h2>
 </div>
+
 <div style="display:flex;gap:10px;margin-bottom:15px">
 <input placeholder="Nome do Cliente" id="clientName" style="flex:1;padding:8px">
 <input type="date" id="clientDate" style="flex:1;padding:8px">
 </div>
 
+<!-- INSTRUÇÕES -->
+<div class="instructions">
+<b>Como pontuar cada área:</b><br>
+0 a 2 → Não existe controle<br>
+3 a 4 → Controle muito básico<br>
+5 a 6 → Controle parcial<br>
+7 a 8 → Bom nível de controle<br>
+9 a 10 → Excelente nível de controle
+</div>
 
 <div id="sliders"></div>
 
@@ -41,9 +62,11 @@ canvas{margin-top:30px}
 
 <canvas id="radarChart"></canvas>
 <div id="classification" style="font-weight:bold;text-align:center;margin:25px 0;font-size:28px"></div>
+
 </div>
 
 <script>
+
 const pillars = [
 "Receitas",
 "Clareza Informações",
@@ -58,88 +81,80 @@ const pillars = [
 const slidersDiv = document.getElementById("sliders");
 
 pillars.forEach((p,i)=>{
-  slidersDiv.innerHTML += `
-  <div class="slider-group">
-    <label>${p} <span class="value" id="val${i}">5</span></label>
-    <input type="range" min="0" max="10" value="5" id="s${i}" oninput="document.getElementById('val${i}').innerText=this.value">
-  </div>`;
+slidersDiv.innerHTML += `
+<div class="slider-group">
+<label>${p} <span class="value" id="val${i}">5</span></label>
+<input type="range" min="0" max="10" value="5"
+id="s${i}"
+oninput="document.getElementById('val${i}').innerText=this.value">
+</div>`;
 });
 
 const ctx = document.getElementById('radarChart');
 
-const chart = new Chart(ctx, {
-  type: 'radar',
-  data: {
-    labels: pillars,
-    datasets: [{
-      label: 'Nível de Maturidade',
-      data: Array(8).fill(5),
-      fill: true,
-      backgroundColor: 'rgba(108,99,255,0.3)',
-      borderColor: '#6c63ff',
-      pointBackgroundColor: '#6c63ff'
-    }]
-  },
-  options: {
-    scales: {
-      r: {
-        min: 0,
-        max: 10,
-        ticks: { stepSize: 2 }
-      }
-    }
-  }
+const chart = new Chart(ctx,{
+type:'radar',
+data:{
+labels:pillars,
+datasets:[{
+label:'Nível de Maturidade',
+data:Array(8).fill(5),
+fill:true,
+backgroundColor:'rgba(108,99,255,0.3)',
+borderColor:'#6c63ff',
+pointBackgroundColor:'#6c63ff'
+}]
+},
+options:{
+scales:{
+r:{
+min:0,
+max:10,
+ticks:{stepSize:2}
+}
+}
+}
 });
 
 function updateChart(){
-
-  const values = pillars.map((_,i)=>Number(document.getElementById(`s${i}`).value));
-  chart.data.datasets[0].data = values;
-  chart.update();
-  classify(values);
+const values = pillars.map((_,i)=>Number(document.getElementById(`s${i}`).value));
+chart.data.datasets[0].data = values;
+chart.update();
+classify(values);
 }
 
 function classify(values){
-  const avg = values.reduce((a,b)=>a+b,0)/values.length;
-  let result = "Crítico";
-  if(avg >= 5) result = "Regular";
-  if(avg >= 7) result = "Bom";
-  if(avg >= 9) result = "Excelente";
-  document.getElementById('classification').innerText = "Classificação Geral: " + result;
+
+const avg = values.reduce((a,b)=>a+b,0)/values.length;
+
+let result = "Crítico";
+let description = "A empresa apresenta alto risco financeiro. Falta controle sobre receitas, custos e planejamento. É necessário estruturar urgentemente os processos financeiros básicos.";
+
+if(avg >= 5){
+result = "Regular";
+description = "A empresa possui algum controle financeiro, porém ainda apresenta falhas importantes. Com organização e acompanhamento é possível evoluir rapidamente.";
+}
+
+if(avg >= 7){
+result = "Bom";
+description = "A empresa demonstra boa organização financeira, com controles definidos e visão de futuro. O próximo passo é otimizar e escalar.";
+}
+
+if(avg >= 9){
+result = "Excelente";
+description = "A empresa possui alta maturidade financeira, previsibilidade e forte capacidade de crescimento sustentável.";
+}
+
+document.getElementById('classification').innerHTML =
+"Classificação Geral: " + result +
+"<div style='font-size:16px;margin-top:8px'>" + description + "</div>";
 }
 
 function printReport(){
-  window.print();
+window.print();
 }
-
-function classify(values){
-  const avg = values.reduce((a,b)=>a+b,0)/values.length;
-
-  let result = "Crítico";
-  let description = "A empresa apresenta alto risco financeiro. Falta controle sobre receitas, custos e planejamento. É necessário estruturar urgentemente os processos financeiros básicos.";
-
-  if(avg >= 5){
-    result = "Regular";
-    description = "A empresa possui algum controle financeiro, porém ainda apresenta falhas importantes. Com organização e acompanhamento é possível evoluir rapidamente.";
-  }
-
-  if(avg >= 7){
-    result = "Bom";
-    description = "A empresa demonstra boa organização financeira, com controles definidos e visão de futuro. O próximo passo é otimizar e escalar.";
-  }
-
-  if(avg >= 9){
-    result = "Excelente";
-    description = "A empresa possui alta maturidade financeira, previsibilidade e forte capacidade de crescimento sustentável.";
-  }
-
-  document.getElementById('classification').innerHTML = 
-    "Classificação Geral: " + result +
-    "<div style='font-size:16px;margin-top:8px'>" + description + "</div>";
-}
-
-
 
 </script>
+
 </body>
 </html>
