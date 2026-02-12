@@ -177,7 +177,6 @@ body{background:#fff}
 
 <div class="app">
 
-<!-- TOPO -->
 <div class="topbar">
 <img src="EM.png">
 <div class="topbar-title">
@@ -186,10 +185,8 @@ body{background:#fff}
 </div>
 </div>
 
-<!-- CONTEÚDO -->
 <div class="grid">
 
-<!-- LADO ESQUERDO -->
 <div class="panel">
 
 <h3>Dados do Cliente</h3>
@@ -229,7 +226,6 @@ body{background:#fff}
 
 </div>
 
-<!-- LADO DIREITO -->
 <div class="chart-panel">
 
 <canvas id="radarChart"></canvas>
@@ -325,7 +321,6 @@ desc="Alta maturidade financeira e forte capacidade de crescimento.";
 color="#16a34a";
 }
 
-/* CLASSIFICAÇÃO */
 document.getElementById("classification").innerHTML=`
 <div style="background:${color}15;border-left:6px solid ${color};padding:20px;border-radius:12px">
 <h2 style="color:${color}">${result}</h2>
@@ -333,11 +328,9 @@ document.getElementById("classification").innerHTML=`
 </div>
 `;
 
-/* NOTA GERAL */
 document.getElementById("score").innerHTML =
 `Nota Geral: <b>${finalScore} / 10</b>`;
 
-/* PONTOS CRÍTICOS */
 let critical = [];
 values.forEach((v,i)=>{
  if(v < 5){
@@ -357,13 +350,48 @@ document.getElementById("criticalPoints").innerHTML =
 "<b>Pontos Críticos:</b> Nenhum identificado.";
 }
 
-/* RESUMO EXECUTIVO */
-document.getElementById("executiveSummary").innerHTML = `
+/* RESUMO EXECUTIVO DINÂMICO */
+
+let summaryText="";
+
+if(result==="Crítico"){
+summaryText=`
+A empresa apresenta nível de maturidade <b>Crítico</b>, com nota geral <b>${finalScore}/10</b>.
+Os principais pontos de atenção estão relacionados aos pilares listados como críticos.
+Recomenda-se priorizar ações corretivas para reverter este quadro e garantir a sustentabilidade do negócio.
+`;
+}
+
+if(result==="Regular"){
+summaryText=`
+A empresa apresenta nível de maturidade <b>Regular</b>, com nota geral <b>${finalScore}/10</b>.
+Existe algum controle financeiro, porém ainda com falhas de padronização, disciplina e acompanhamento.
+O foco deve ser estruturar controles básicos (caixa, custos e receitas), criar rotina de acompanhamento financeiro
+e reduzir riscos operacionais. Com essas ações, a empresa tende a evoluir rapidamente.
+`;
+}
+
+if(result==="Bom"){
+summaryText=`
+A empresa apresenta nível de maturidade <b>Bom</b>, com nota geral <b>${finalScore}/10</b>.
+Possui controles financeiros estruturados, boa visibilidade dos números e tomada de decisão baseada em dados.
+O próximo passo é otimizar custos e processos, fortalecer previsões e projeções e construir reservas financeiras.
+Com esses avanços, a empresa se prepara para atingir nível Excelente.
+`;
+}
+
+if(result==="Excelente"){
+summaryText=`
+A empresa apresenta nível de maturidade <b>Excelente</b>, com nota geral <b>${finalScore}/10</b>.
+Demonstra alto grau de organização financeira, previsibilidade e governança.
+Recomenda-se aprimorar análises estratégicas e planejar expansão e investimentos.
+O foco passa a ser crescimento sustentável e maximização de resultados.
+`;
+}
+
+document.getElementById("executiveSummary").innerHTML=`
 <b>Resumo Executivo</b><br><br>
-A empresa apresenta nível de maturidade <b>${result}</b>, com nota geral
-<b>${finalScore}/10</b>. Os principais pontos de atenção estão relacionados
-aos pilares listados como críticos. Recomenda-se priorizar ações corretivas
-nestes itens antes de avançar para otimizações e crescimento.
+${summaryText}
 `;
 
 }
