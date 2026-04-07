@@ -2,6 +2,1019 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico Financeiro — EM Financeira</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #0a9ea5;
+  --teal-dark: #077a80;
+  --teal-mid: #0d8a90;
+  --teal-light: #e0f7f8;
+  --teal-subtle: #f0fbfb;
+  --dark: #0d2b2c;
+  --mid: #2e5c5e;
+  --gold: #c9a84c;
+  --gold-light: #f5ecd4;
+  --white: #ffffff;
+  --soft: #f6fafa;
+  --text: #1a3a3b;
+  --muted: #6b9091;
+  --border: #d0eaeb;
+  --red: #dc2626;
+  --amber: #d97706;
+  --blue: #2563eb;
+  --green: #16a34a;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--soft);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── STEP SYSTEM ─────────────────────────── */
+.step { display: none; }
+.step.active { display: block; }
+
+/* ── HERO / LANDING ──────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(145deg, var(--dark) 0%, var(--mid) 55%, var(--teal-dark) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  border: 80px solid rgba(10,158,165,0.1);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -60px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  border: 60px solid rgba(201,168,76,0.08);
+  pointer-events: none;
+}
+.hero-logo {
+  height: 64px;
+  margin-bottom: 36px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(10,158,165,0.2);
+  border: 1px solid rgba(10,158,165,0.4);
+  color: #7de8ec;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(28px, 5vw, 44px);
+  color: white;
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 18px;
+  max-width: 620px;
+}
+.hero h1 span { color: #7de8ec; }
+.hero p {
+  font-size: 16px;
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+  max-width: 480px;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 48px;
+}
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat-num {
+  font-family: 'Lora', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.hero-stat-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.btn-primary {
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 18px 48px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 8px 24px rgba(10,158,165,0.35);
+}
+.btn-primary:hover {
+  background: var(--teal-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(10,158,165,0.45);
+}
+.hero-note {
+  margin-top: 18px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.5px;
+}
+
+/* ── LEAD CAPTURE ────────────────────────── */
+.lead-wrap {
+  min-height: 100vh;
+  background: var(--soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+.lead-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 40px rgba(10,158,165,0.1);
+  padding: 48px 40px;
+  max-width: 480px;
+  width: 100%;
+}
+.lead-card-logo {
+  height: 48px;
+  margin-bottom: 28px;
+}
+.lead-step-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.lead-card h2 {
+  font-family: 'Lora', serif;
+  font-size: 26px;
+  color: var(--dark);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.lead-card > p {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+.field { margin-bottom: 18px; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mid);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+.field input, .field select {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: white;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--teal);
+}
+.field input::placeholder { color: #aac4c5; }
+.btn-full {
+  width: 100%;
+  padding: 15px;
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.btn-full:hover { background: var(--teal-dark); }
+.lead-privacy {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 16px;
+  line-height: 1.5;
+}
+
+/* ── DIAGNOSTIC FORM ─────────────────────── */
+.diag-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+.diag-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--dark);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  margin-bottom: 28px;
+}
+.diag-header img { height: 48px; filter: brightness(0) invert(1); opacity: 0.9; }
+.diag-header-text h2 {
+  font-family: 'Lora', serif;
+  font-size: 20px;
+  color: white;
+  margin-bottom: 4px;
+}
+.diag-header-text p { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 300; }
+.client-info-bar {
+  background: var(--teal-subtle);
+  border: 1px solid var(--teal-light);
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-bottom: 28px;
+  font-size: 13px;
+  color: var(--mid);
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.client-info-bar strong { color: var(--dark); font-weight: 500; }
+
+.diag-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+@media(max-width:640px) { .diag-grid { grid-template-columns: 1fr; } }
+
+.slider-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(10,158,165,0.06);
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+.slider-card:hover { border-color: var(--teal-light); }
+.slider-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.slider-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dark);
+}
+.slider-val {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.slider-val.low { background: var(--red); }
+.slider-val.mid-low { background: var(--amber); }
+.slider-val.mid { background: var(--blue); }
+.slider-val.high { background: var(--green); }
+
+input[type=range] {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: var(--border);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.guide-card {
+  background: var(--gold-light);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 20px;
+  margin-bottom: 28px;
+}
+.guide-card h4 { font-size: 12px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+.guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.guide-item { font-size: 12px; color: #5a4010; }
+
+.btn-generate {
+  width: 100%;
+  padding: 17px;
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 20px rgba(10,158,165,0.3);
+}
+.btn-generate:hover {
+  background: var(--teal-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(10,158,165,0.4);
+}
+
+/* ── RESULT PAGE ─────────────────────────── */
+.result-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+.result-header {
+  background: var(--dark);
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.result-header img { height: 44px; filter: brightness(0) invert(1); opacity: 0.85; }
+.result-header-right { text-align: right; }
+.result-header-right .label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+.result-header-right .client-name-display { font-family: 'Lora', serif; font-size: 20px; color: white; }
+
+.result-score-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+@media(max-width:560px) { .result-score-row { grid-template-columns: 1fr; } }
+
+.score-card {
+  border-radius: 14px;
+  padding: 28px;
+  text-align: center;
+}
+.score-card.main {
+  background: var(--dark);
+  color: white;
+}
+.score-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.5; margin-bottom: 10px; }
+.score-number {
+  font-family: 'Lora', serif;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.score-sub { font-size: 13px; opacity: 0.6; font-weight: 300; }
+.level-card {
+  border-radius: 14px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.level-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; margin-bottom: 10px; }
+.level-name {
+  font-family: 'Lora', serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.level-desc { font-size: 13px; line-height: 1.6; opacity: 0.85; font-weight: 300; }
+
+.chart-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: 0 2px 16px rgba(10,158,165,0.07);
+  margin-bottom: 24px;
+}
+.chart-card h3 {
+  font-family: 'Lora', serif;
+  font-size: 18px;
+  color: var(--dark);
+  margin-bottom: 24px;
+}
+.chart-container { max-width: 420px; margin: 0 auto; }
+
+.critical-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: 0 2px 16px rgba(10,158,165,0.07);
+  margin-bottom: 24px;
+}
+.critical-card h3 { font-family: 'Lora', serif; font-size: 18px; color: var(--dark); margin-bottom: 20px; }
+.critical-list { display: flex; flex-direction: column; gap: 10px; }
+.critical-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--soft);
+}
+.critical-item.alert { background: #fef2f2; }
+.critical-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.critical-item-name { font-size: 13px; font-weight: 500; color: var(--dark); flex: 1; }
+.critical-item-score {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-card {
+  background: var(--teal-subtle);
+  border: 1px solid var(--teal-light);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.summary-card h3 { font-family: 'Lora', serif; font-size: 18px; color: var(--dark); margin-bottom: 16px; }
+.summary-card p { font-size: 14px; color: var(--mid); line-height: 1.75; font-weight: 300; }
+
+/* ── CTA BLOCK ───────────────────────────── */
+.cta-block {
+  border-radius: var(--radius);
+  padding: 40px 36px;
+  background: linear-gradient(135deg, var(--dark), var(--mid));
+  color: white;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.cta-block::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  border: 50px solid rgba(10,158,165,0.15);
+}
+.cta-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.cta-block h3 {
+  font-family: 'Lora', serif;
+  font-size: 26px;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.cta-block p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 480px;
+  margin-bottom: 28px;
+}
+.cta-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #25d366;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+}
+.btn-whatsapp:hover { background: #1da851; transform: translateY(-1px); }
+.btn-outline-white {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline-white:hover { border-color: rgba(255,255,255,0.6); color: white; }
+
+.print-btn-row {
+  text-align: center;
+  margin-top: 8px;
+}
+.btn-print {
+  background: none;
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-print:hover { border-color: var(--teal); color: var(--teal); }
+
+/* ── PRINT ───────────────────────────────── */
+@media print {
+  .hero, .lead-wrap, #step-diag { display: none !important; }
+  .cta-block, .btn-print, .print-btn-row { display: none !important; }
+  body { background: white; }
+  .result-wrap { padding: 20px; }
+}
+
+/* ── ANIMATIONS ──────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.step.active { animation: fadeUp 0.35s ease forwards; }
+</style>
+</head>
+<body>
+
+<!-- ══ STEP 1: LANDING ══════════════════════════════════════════ -->
+<div class="step active" id="step-hero">
+  <div class="hero">
+    <img src="EM.png" class="hero-logo" onerror="this.style.display='none'">
+    <div class="hero-badge">Ferramenta gratuita · EM Financeira</div>
+    <h1>Qual é o nível de <span>maturidade financeira</span> da sua empresa?</h1>
+    <p>Responda 8 perguntas em menos de 5 minutos e descubra onde estão os maiores riscos no financeiro do seu negócio.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label">Critérios</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-label">Minutos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-label">Gratuito</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="goTo('step-lead')">Iniciar diagnóstico gratuito</button>
+    <div class="hero-note">Sem compromisso · Resultado imediato</div>
+  </div>
+</div>
+
+<!-- ══ STEP 2: LEAD CAPTURE ═════════════════════════════════════ -->
+<div class="step" id="step-lead">
+  <div class="lead-wrap">
+    <div class="lead-card">
+      <img src="EM.png" class="lead-card-logo" onerror="this.style.display='none'">
+      <div class="lead-step-label">Passo 1 de 2</div>
+      <h2>Antes de começar, me fala um pouco sobre você</h2>
+      <p>Para personalizar seu diagnóstico e enviar o resultado, precisamos de algumas informações básicas.</p>
+      <div class="field">
+        <label>SEU NOME</label>
+        <input id="leadName" placeholder="Como você se chama?">
+      </div>
+      <div class="field">
+        <label>WHATSAPP</label>
+        <input id="leadPhone" placeholder="(00) 00000-0000" type="tel">
+      </div>
+      <div class="field">
+        <label>SEGMENTO DA EMPRESA</label>
+        <select id="leadSegment">
+          <option value="">Selecione...</option>
+          <option>Comércio</option>
+          <option>Serviços</option>
+          <option>Indústria</option>
+          <option>Tecnologia</option>
+          <option>Saúde</option>
+          <option>Alimentação</option>
+          <option>Construção</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>NÚMERO DE FUNCIONÁRIOS</label>
+        <select id="leadSize">
+          <option value="">Selecione...</option>
+          <option>Somente eu (MEI)</option>
+          <option>2 a 5 funcionários</option>
+          <option>6 a 20 funcionários</option>
+          <option>Mais de 20 funcionários</option>
+        </select>
+      </div>
+      <button class="btn-full" onclick="goToDiag()">Continuar para o diagnóstico →</button>
+      <div class="lead-privacy">Seus dados são confidenciais e não serão compartilhados com terceiros.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 3: DIAGNOSTIC ════════════════════════════════════════ -->
+<div class="step" id="step-diag">
+  <div class="diag-wrap">
+    <div class="diag-header">
+      <img src="EM.png" onerror="this.style.display='none'">
+      <div class="diag-header-text">
+        <h2>Diagnóstico Financeiro</h2>
+        <p>Avalie cada critério de 0 a 10 conforme a realidade da sua empresa hoje</p>
+      </div>
+    </div>
+
+    <div class="client-info-bar" id="clientInfoBar"></div>
+
+    <div class="guide-card">
+      <h4>Guia de pontuação</h4>
+      <div class="guide-grid">
+        <div class="guide-item">0–2 → Não existe controle</div>
+        <div class="guide-item">3–4 → Controle muito básico</div>
+        <div class="guide-item">5–6 → Controle parcial</div>
+        <div class="guide-item">7–8 → Bom nível de controle</div>
+        <div class="guide-item">9–10 → Excelente nível de controle</div>
+      </div>
+    </div>
+
+    <div class="diag-grid" id="sliders"></div>
+
+    <button class="btn-generate" onclick="generateResult()">Ver meu diagnóstico completo →</button>
+  </div>
+</div>
+
+<!-- ══ STEP 4: RESULT ════════════════════════════════════════════ -->
+<div class="step" id="step-result">
+  <div class="result-wrap">
+
+    <div class="result-header">
+      <img src="EM.png" onerror="this.style.display='none'">
+      <div class="result-header-right">
+        <div class="label">Diagnóstico de</div>
+        <div class="client-name-display" id="resultName">—</div>
+      </div>
+    </div>
+
+    <div class="result-score-row">
+      <div class="score-card main">
+        <div class="score-label">Nota geral</div>
+        <div class="score-number" id="resultScore">—</div>
+        <div class="score-sub">de 10 pontos</div>
+      </div>
+      <div class="level-card" id="levelCard">
+        <div class="level-label">Nível de maturidade</div>
+        <div class="level-name" id="levelName">—</div>
+        <div class="level-desc" id="levelDesc">—</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>Mapa dos 8 pilares financeiros</h3>
+      <div class="chart-container">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+
+    <div class="critical-card">
+      <h3>Análise por pilar</h3>
+      <div class="critical-list" id="criticalList"></div>
+    </div>
+
+    <div class="summary-card">
+      <h3>Resumo executivo</h3>
+      <p id="summaryText"></p>
+    </div>
+
+    <div class="cta-block" id="ctaBlock">
+      <div class="cta-tag">Próximo passo</div>
+      <h3 id="ctaTitle">Quer entender como resolver esses pontos?</h3>
+      <p id="ctaText">A Maite oferece um diagnóstico aprofundado gratuito de 30 minutos para entender a situação da sua empresa e o que pode ser melhorado. Sem compromisso.</p>
+      <div class="cta-buttons">
+        <a class="btn-whatsapp" id="ctaWhatsapp" href="https://wa.me/5512992372359" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.525 5.845L.057 23.428a.5.5 0 0 0 .612.612l5.617-1.47A11.956 11.956 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.583-.493-5.083-1.355l-.363-.215-3.764.984.998-3.73-.237-.381A9.948 9.948 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          Falar com a Maite
+        </a>
+        <button class="btn-outline-white" onclick="window.print()">Salvar como PDF</button>
+      </div>
+    </div>
+
+    <div class="print-btn-row">
+      <button class="btn-print" onclick="goTo('step-hero')">← Fazer novo diagnóstico</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const pillars = [
+  { name: "Receitas", desc: "Controle e previsibilidade de entradas" },
+  { name: "Clareza das Informações", desc: "Visibilidade dos dados financeiros" },
+  { name: "Custos Fixos e Variáveis", desc: "Mapeamento e controle de custos" },
+  { name: "Projeção de Receitas", desc: "Capacidade de projetar o futuro" },
+  { name: "Reserva de Emergência", desc: "Proteção contra imprevistos" },
+  { name: "Planejamento Financeiro", desc: "Estrutura de planejamento" },
+  { name: "Reserva de Oportunidades", desc: "Capital disponível para crescer" },
+  { name: "Fluxo de Caixa", desc: "Controle do dinheiro no tempo" }
+];
+
+let leadData = {};
+let chartInstance = null;
+
+// Build sliders
+const slidersDiv = document.getElementById("sliders");
+pillars.forEach((p, i) => {
+  slidersDiv.innerHTML += `
+  <div class="slider-card">
+    <div class="slider-top">
+      <div>
+        <div class="slider-name">${p.name}</div>
+      </div>
+      <div class="slider-val" id="val${i}">5</div>
+    </div>
+    <input type="range" min="0" max="10" value="5" id="s${i}"
+      oninput="updateVal(${i}, this.value)">
+    <div class="slider-labels"><span>0</span><span>5</span><span>10</span></div>
+  </div>`;
+});
+
+function updateVal(i, v) {
+  const el = document.getElementById(`val${i}`);
+  el.textContent = v;
+  el.className = 'slider-val';
+  if (v <= 2) el.classList.add('low');
+  else if (v <= 4) el.classList.add('mid-low');
+  else if (v <= 6) el.classList.add('mid');
+  else el.classList.add('high');
+}
+
+function goTo(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goToDiag() {
+  const name = document.getElementById('leadName').value.trim();
+  const phone = document.getElementById('leadPhone').value.trim();
+  const segment = document.getElementById('leadSegment').value;
+  const size = document.getElementById('leadSize').value;
+
+  if (!name || !phone) {
+    alert('Por favor, preencha seu nome e WhatsApp para continuar.');
+    return;
+  }
+
+  leadData = { name, phone, segment, size };
+
+  document.getElementById('clientInfoBar').innerHTML =
+    `<span><strong>Nome:</strong> ${name}</span>` +
+    (segment ? `<span><strong>Segmento:</strong> ${segment}</span>` : '') +
+    (size ? `<span><strong>Porte:</strong> ${size}</span>` : '');
+
+  goTo('step-diag');
+}
+
+function getColor(v) {
+  if (v <= 2) return '#dc2626';
+  if (v <= 4) return '#d97706';
+  if (v <= 6) return '#2563eb';
+  return '#16a34a';
+}
+
+function generateResult() {
+  const values = pillars.map((_, i) => Number(document.getElementById(`s${i}`).value));
+  const avg = values.reduce((a, b) => a + b, 0) / values.length;
+  const score = avg.toFixed(1);
+
+  let level, desc, color, bgColor;
+  if (avg < 5) {
+    level = 'Crítico'; desc = 'A empresa apresenta alto risco financeiro e ausência de controles essenciais.';
+    color = '#dc2626'; bgColor = '#fef2f2';
+  } else if (avg < 7) {
+    level = 'Regular'; desc = 'Há algum controle financeiro, porém ainda inconsistente e com lacunas importantes.';
+    color = '#d97706'; bgColor = '#fffbeb';
+  } else if (avg < 9) {
+    level = 'Bom'; desc = 'Boa organização financeira com controles estruturados e visibilidade adequada.';
+    color = '#2563eb'; bgColor = '#eff6ff';
+  } else {
+    level = 'Excelente'; desc = 'Alta maturidade financeira com forte capacidade de crescimento sustentável.';
+    color = '#16a34a'; bgColor = '#f0fdf4';
+  }
+
+  // Score card
+  document.getElementById('resultName').textContent = leadData.name || '—';
+  document.getElementById('resultScore').textContent = score;
+
+  const lc = document.getElementById('levelCard');
+  lc.style.background = bgColor;
+  document.getElementById('levelName').style.color = color;
+  document.getElementById('levelName').textContent = level;
+  document.getElementById('levelDesc').textContent = desc;
+  document.getElementById('levelDesc').style.color = color;
+
+  // Chart
+  if (chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: {
+      labels: pillars.map(p => p.name),
+      datasets: [{
+        label: 'Maturidade',
+        data: values,
+        fill: true,
+        backgroundColor: 'rgba(10,158,165,0.15)',
+        borderColor: '#0a9ea5',
+        pointBackgroundColor: values.map(v => getColor(v)),
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 5
+      }]
+    },
+    options: {
+      scales: { r: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 10 } } } },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // Pillar list
+  const sorted = pillars.map((p, i) => ({ name: p.name, val: values[i] }))
+    .sort((a, b) => a.val - b.val);
+
+  document.getElementById('criticalList').innerHTML = sorted.map(item => {
+    const c = getColor(item.val);
+    const isAlert = item.val < 5;
+    return `<div class="critical-item${isAlert ? ' alert' : ''}">
+      <div class="critical-dot" style="background:${c}"></div>
+      <div class="critical-item-name">${item.name}</div>
+      <div class="critical-item-score" style="background:${c}20;color:${c}">${item.val}/10</div>
+    </div>`;
+  }).join('');
+
+  // Summary
+  const critical = pillars.filter((_, i) => values[i] < 5).map(p => p.name);
+  let summary = '';
+  if (level === 'Crítico') {
+    summary = `A empresa apresenta nível de maturidade <strong>Crítico</strong>, com nota geral <strong>${score}/10</strong>. Os principais pontos de atenção são: ${critical.join(', ')}. É fundamental estruturar controles financeiros básicos o quanto antes para garantir a sustentabilidade do negócio.`;
+  } else if (level === 'Regular') {
+    summary = `A empresa apresenta nível de maturidade <strong>Regular</strong>, com nota geral <strong>${score}/10</strong>. Existe algum controle financeiro, porém com falhas de padronização e consistência. O foco deve ser estruturar rotinas de acompanhamento e eliminar os pontos críticos identificados. Com essas melhorias, a evolução tende a ser rápida.`;
+  } else if (level === 'Bom') {
+    summary = `A empresa apresenta nível de maturidade <strong>Bom</strong>, com nota geral <strong>${score}/10</strong>. Possui controles financeiros estruturados e boa visibilidade dos números. O próximo passo é otimizar processos, fortalecer projeções e construir reservas mais robustas para atingir o nível Excelente.`;
+  } else {
+    summary = `A empresa apresenta nível de maturidade <strong>Excelente</strong>, com nota geral <strong>${score}/10</strong>. Demonstra alto grau de organização financeira, previsibilidade e governança. O foco agora é crescimento sustentável, análises estratégicas e maximização de resultados.`;
+  }
+  document.getElementById('summaryText').innerHTML = summary;
+
+  // CTA dinâmico por nível
+  const ctaMessages = {
+    'Crítico': {
+      title: 'Sua empresa precisa de atenção agora.',
+      text: `${leadData.name ? leadData.name.split(' ')[0] + ', o' : 'O'} diagnóstico mostrou pontos críticos que podem comprometer a sustentabilidade do negócio. A Maite oferece uma conversa gratuita de 30 minutos para entender sua situação e mostrar como organizar isso de forma rápida e prática.`
+    },
+    'Regular': {
+      title: 'Você está no caminho certo — mas há espaço para crescer.',
+      text: `${leadData.name ? leadData.name.split(' ')[0] + ', a' : 'A'} empresa tem algum controle, mas ainda tem lacunas importantes. Uma sessão gratuita de 30 minutos com a Maite pode mostrar exatamente o que priorizar para dar o próximo salto.`
+    },
+    'Bom': {
+      title: 'Bom resultado. Vamos levar para o próximo nível?',
+      text: `${leadData.name ? leadData.name.split(' ')[0] + ', a' : 'A'} empresa está bem organizada financeiramente. Para chegar ao nível Excelente, uma conversa gratuita com a Maite pode mostrar quais ajustes têm maior impacto no seu caso específico.`
+    },
+    'Excelente': {
+      title: 'Parabéns pelo resultado. Vamos pensar em crescimento?',
+      text: `${leadData.name ? leadData.name.split(' ')[0] + ', a' : 'A'} empresa está no mais alto nível de maturidade financeira. Se quiser conversar sobre como usar essa base para crescer de forma estruturada, a Maite tem 30 minutos gratuitos para você.`
+    }
+  };
+
+  const msg = ctaMessages[level];
+  document.getElementById('ctaTitle').textContent = msg.title;
+  document.getElementById('ctaText').textContent = msg.text;
+
+  const waText = encodeURIComponent(
+    `Olá Maite! Me chamo ${leadData.name} e acabei de fazer o diagnóstico financeiro da EM Financeira.\n\n` +
+    `📊 *Resultado do diagnóstico:*\n` +
+    `• Nível: ${level}\n` +
+    `• Nota geral: ${score}/10\n` +
+    `• Segmento: ${leadData.segment || 'Não informado'}\n` +
+    `• Funcionários: ${leadData.size || 'Não informado'}\n\n` +
+    `Gostaria de conversar sobre os próximos passos.`
+  );
+  document.getElementById('ctaWhatsapp').href = `https://wa.me/5512992372359?text=${waText}`;
+
+  // Salvar lead no Google Sheets
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0QErcqZVTQLElFeHGbYGnpMjCiOx1oi9H6ZVgjNYFS5A-d6OsaN-3IQ4du5ch5gPf/exec';
+  const payload = {
+    data:       new Date().toLocaleString('pt-BR'),
+    nome:       leadData.name,
+    whatsapp:   leadData.phone,
+    segmento:   leadData.segment || '',
+    funcionarios: leadData.size || '',
+    nota:       score,
+    nivel:      level,
+    receitas:             values[0],
+    clareza:              values[1],
+    custos:               values[2],
+    projecao:             values[3],
+    reserva_emergencia:   values[4],
+    planejamento:         values[5],
+    reserva_oportunidades:values[6],
+    fluxo_caixa:          values[7]
+  };
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {}); // silencioso — não bloqueia o fluxo se falhar
+
+  goTo('step-result');
+}
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <title>Diagnóstico Financeiro Empresarial</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
