@@ -624,6 +624,7 @@ input[type=range]::-webkit-slider-thumb {
 <!-- ══ STEP 1: LANDING ══════════════════════════════════════════ -->
 <div class="step active" id="step-hero">
   <div class="hero">
+    <img src="EM.png" class="hero-logo" onerror="this.style.display='none'">
     <div class="hero-badge">Ferramenta gratuita · EM Financeira</div>
     <h1>Qual é o nível de <span>maturidade financeira</span> da sua empresa?</h1>
     <p>Responda 8 perguntas em menos de 5 minutos e descubra onde estão os maiores riscos no financeiro do seu negócio.</p>
@@ -650,7 +651,7 @@ input[type=range]::-webkit-slider-thumb {
 <div class="step" id="step-lead">
   <div class="lead-wrap">
     <div class="lead-card">
-      <img src="EM.png" class="lead-card-logo" alt="EM Financeira">
+      <img src="EM.png" class="lead-card-logo" onerror="this.style.display='none'">
       <div class="lead-step-label">Passo 1 de 2</div>
       <h2>Antes de começar, me fala um pouco sobre você</h2>
       <p>Para personalizar seu diagnóstico e enviar o resultado, precisamos de algumas informações básicas.</p>
@@ -696,7 +697,8 @@ input[type=range]::-webkit-slider-thumb {
 <div class="step" id="step-diag">
   <div class="diag-wrap">
     <div class="diag-header">
-      <img src="EM.png" alt="EM Financeira">
+      <img src="EM.png" onerror="this.style.display='none'">
+      <div class="diag-header-text">
         <h2>Diagnóstico Financeiro</h2>
         <p>Avalie cada critério de 0 a 10 conforme a realidade da sua empresa hoje</p>
       </div>
@@ -726,7 +728,8 @@ input[type=range]::-webkit-slider-thumb {
   <div class="result-wrap">
 
     <div class="result-header">
-      <img src="EM.png" alt="EM Financeira">
+      <img src="EM.png" onerror="this.style.display='none'">
+      <div class="result-header-right">
         <div class="label">Diagnóstico de</div>
         <div class="client-name-display" id="resultName">—</div>
       </div>
@@ -977,7 +980,7 @@ function generateResult() {
   document.getElementById('ctaWhatsapp').href = `https://wa.me/5512992372359?text=${waText}`;
 
   // Salvar lead no Google Sheets
-  const SCRIPT_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0QErcqZVTQLElFeHGbYGnpMjCiOx1oi9H6ZVgjNYFS5A-d6OsaN-3IQ4du5ch5gPf/exec';
   const payload = {
     data:       new Date().toLocaleString('pt-BR'),
     nome:       leadData.name,
